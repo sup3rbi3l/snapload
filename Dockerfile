@@ -1,5 +1,5 @@
 # Usa imagem leve com Python
-FROM python:3.12-slim
+FROM python:3.12-2
 
 # Instala ffmpeg e dependências
 RUN apt-get update && apt-get install -y ffmpeg curl && \
