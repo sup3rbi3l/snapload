@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup
 import threading
 import time
 import requests
-from bs4 import BeautifulSoup
 import instaloader
 import re
 

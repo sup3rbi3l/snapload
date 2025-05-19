@@ -4,8 +4,9 @@ import re
 def login_ig():
     USERNAME = 'myrabella.contact@gmail.com'
     PASSWORD = 'VIDA@2018'
-    L = instaloader.Instaloader()
     
+    L = instaloader.Instaloader()
+    L.login(USERNAME,PASSWORD)
     return L
 
 
