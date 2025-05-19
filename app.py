@@ -19,7 +19,7 @@ def login_ig():
     PASSWORD = 'VIDA@2018'
     
     L = instaloader.Instaloader()
-    L.login(USERNAME,PASSWORD)
+    
     
     return L
 
