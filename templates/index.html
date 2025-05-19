@@ -1,0 +1,76 @@
+{% extends "template.html" %}
+
+
+
+
+{% block conteudo %}
+
+<body>
+    <main class="main-content">
+        <section class="hero-section">
+            <div class="container">
+                <h1>Baixe Vídeos Online de Forma Simples e Rápida</h1>
+
+                
+                <!-- Área para mostrar mensagens de status ou prévia do vídeo -->
+                <div id="status-messages" class="status-messages"></div>
+                <div id="video-preview-area" class="video-preview-area" style="display: none;">
+                    <!-- A prévia do vídeo e opções de download apareceriam aqui via JavaScript -->
+                    <h3>Prévia do Vídeo:</h3>
+                    <img id="thumbnail" src="#" alt="Thumbnail do Vídeo" style="max-width: 300px; margin-bottom: 10px;">
+                    <p id="video-title">Título do Vídeo</p>
+                    <button id="confirm-download-btn" class="btn-confirm-download">Confirmar Download</button>
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="features-section">
+            <div class="container">
+                <h2>Por que usar o SnapSave?</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <!-- <i class="fas fa-rocket feature-icon"></i> -->
+                        <h3>Rápido e Fácil</h3>
+                        <p>Interface intuitiva para downloads em segundos.</p>
+                    </div>
+                    <div class="feature-item">
+                        <!-- <i class="fas fa-check-circle feature-icon"></i> -->
+                        <h3>Gratuito e Ilimitado</h3>
+                        <p>Baixe quantos vídeos quiser, sem custos.</p>
+                    </div>
+                    <div class="feature-item">
+                        <!-- <i class="fas fa-shield-alt feature-icon"></i> -->
+                        <h3>Seguro e Confiável</h3>
+                        <p>Downloads diretos sem redirecionamentos desnecessários.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seções de âncora para a navbar (opcional, mas pode ser útil) -->
+        <section class="features-section">
+        <section id="youtube" class="platform-info">
+            <div class="container">
+                <h2>Downloads do YouTube</h2>
+                <p>Baixe vídeos do YouTube em diversos formatos e qualidades para assistir offline.</p>
+            </div>
+        </section>
+        <section id="tiktok" class="platform-info">
+            <div class="container">
+                <h2>Downloads do TikTok</h2>
+                <p>Obtenha seus vídeos favoritos do TikTok sem marca d'água (quando possível) e em alta qualidade.</p>
+            </div>
+        </section>
+        <section id="instagram" class="platform-info">
+            <div class="container">
+                <h2>Downloads do Instagram</h2>
+                <p>Salve Reels, vídeos do feed e Stories do Instagram diretamente para o seu dispositivo.</p>
+            </div>
+        </section>
+        
+        </section>
+    </main>
+
+</body>
+{% endblock %}

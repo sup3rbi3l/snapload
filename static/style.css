@@ -1,0 +1,628 @@
+
+*{
+    margin: 0%;
+    padding: 0%;
+    text-decoration: none;
+    }
+
+    a {
+        color: inherit; /* Herda a cor do texto pai */
+        /* Ou defina uma cor específica, se preferir: */
+        /* color: #333; /* Exemplo: cor cinza escuro */
+        /* color: black; /* Exemplo: cor preta */
+    
+        text-decoration: none !important; /* SEM sublinhado no estado normal */
+                                       /* O !important pode ser útil se outra regra estiver
+                                          forçando o sublinhado, mas use com cautela. */
+    }
+    
+    /* Estilo para o link quando o mouse está sobre ele (hover) */
+    a:hover {
+        text-decoration: none !important; /* Garante que NÃO haja sublinhado no hover */
+    
+        /* (Opcional) Você ainda pode mudar a cor no hover, se quiser, para feedback visual */
+        /* color: #007bff; /* Exemplo: um azul para indicar interatividade */
+        /* opacity: 0.8; /* Outra forma de indicar hover */
+    }
+    
+    /* (Opcional) Estilo para links visitados, se você também quiser controlar isso */
+    a:visited {
+        color: inherit; /* Ou a cor que você definiu para 'a' */
+        text-decoration: none !important; /* Garante que links visitados também não tenham sublinhado */
+    }
+
+
+.teste{
+    color: blue;
+    font-size: 0%;
+}
+.block{
+    font-size: 500%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-top: 0%;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: white;
+    border-style: ridge;
+    border-color: red;
+}
+.container_icons{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.container {
+    
+    padding: 0px;
+    margin: 0%;
+    
+    display: inline-block;
+    align-items: center;
+    width:40% ;
+    
+}
+.img_icon{
+    width: 25%;
+
+
+}
+
+body {
+    margin: 0; 
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+}
+h1 {
+    color: #007bff;
+}
+
+a {
+    display: block;
+    margin-top: 20px;
+    color: #007bff;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+.h1_ig {
+    
+    color: #5b51d8;
+    text-decoration: none;
+}
+
+
+
+
+.container1 {
+    max-width: 1100px; /* Largura máxima do conteúdo */
+    margin: 0 auto;    /* Centralizar o container */
+    padding: 0 20px;   /* Espaçamento interno nas laterais */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilos da Navbar */
+.navbar {
+    background-color: #2c3e50; /* Um azul escuro/cinza */
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky; /* Faz a navbar ficar no topo ao rolar */
+    top: 0;
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between; /* Logo à esquerda, menu à direita */
+    align-items: center;
+}
+
+.nav-logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #ecf0f1; /* Cor clara para o logo */
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.nav-logo:hover {
+    color: #1abc9c; /* Cor de destaque no hover */
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+}
+
+.nav-item {
+    margin-left: 25px; /* Espaçamento entre os itens do menu */
+}
+
+.nav-link {
+    color: #ecf0f1; /* Cor clara para os links */
+    text-decoration: none;
+    font-size: 1em;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active { /* Classe 'active' pode ser adicionada via JS ou pelo servidor para a página atual */
+    background-color: #1abc9c; /* Cor de destaque */
+    color: #fff;
+}
+
+/* Estilo opcional para o conteúdo do header de exemplo */
+header h1 {
+    color: #2c3e50;
+}
+header p {
+    font-size: 1.1em;
+    color: #555;
+}
+
+/* Para responsividade básica (exemplo: menu empilhado em telas pequenas) */
+@media (max-width: 768px) {
+    .navbar .container {
+        flex-direction: column; /* Empilha logo e menu */
+        align-items: flex-start;
+    }
+
+    .nav-menu {
+        flex-direction: column; /* Empilha os itens do menu */
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .nav-item {
+        margin-left: 0;
+        width: 100%;
+        text-align: center; /* Centraliza os links */
+    }
+
+    .nav-link {
+        display: block; /* Faz o link ocupar a largura total do item */
+        padding: 10px;
+        border-bottom: 1px solid #34495e; /* Linha separadora entre os links */
+    }
+
+    .nav-item:last-child .nav-link {
+        border-bottom: none;
+    }
+}
+
+/* Estilos Adicionais para Home e Footer */
+
+/* Main Content Area */
+.main-content {
+    padding-top: 0px; /* Espaço abaixo da navbar fixa */
+}
+
+/* Hero Section */
+.hero-section {
+    background-color: #e9ecef; /* Um cinza bem claro */
+    padding: 60px 0;
+    text-align: center;
+}
+
+.hero-section h1 {
+    font-size: 2.8em;
+    color: #343a40;
+    margin-bottom: 15px;
+}
+
+.hero-section .subtitle {
+    font-size: 1.2em;
+    color: #6c757d;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.download-form .input-group {
+    position: relative; /* Para posicionar ícones dentro, se usar */
+    margin-bottom: 15px;
+}
+
+.download-form input[type="url"] {
+    width: 80%;
+    max-width: 500px;
+    padding: 15px 20px;
+    font-size: 1em;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.075);
+}
+
+.download-form .btn-download, .btn-confirm-download {
+    background-color: #007bff; /* Cor primária (azul) */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.download-form .btn-download:hover, .btn-confirm-download:hover {
+    background-color: #0056b3; /* Azul mais escuro no hover */
+}
+
+.status-messages {
+    margin-top: 20px;
+    color: #dc3545; /* Cor para mensagens de erro/status */
+    font-weight: bold;
+}
+
+.video-preview-area {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: inline-block; /* Para centralizar com text-align: center do pai */
+}
+
+
+/* Features Section */
+.features-section {
+    padding: 60px 0;
+    text-align: center;
+}
+
+.features-section h2 {
+    font-size: 2.2em;
+    color: #343a40;
+    margin-bottom: 40px;
+}
+
+.features-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap; /* Para responsividade */
+    gap: 20px; /* Espaço entre os itens */
+}
+
+.feature-item {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    flex-basis: calc(33.333% - 20px); /* Aproximadamente 3 colunas */
+    min-width: 280px; /* Largura mínima antes de quebrar */
+    text-align: center;
+}
+
+.feature-item .feature-icon { /* Estilize seus ícones aqui */
+    font-size: 2.5em;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.feature-item h3 {
+    font-size: 1.4em;
+    color: #343a40;
+    margin-bottom: 10px;
+}
+
+.feature-item p {
+    font-size: 0.95em;
+    color: #6c757d;
+}
+
+/* Platform Info Sections (para âncoras da navbar) */
+.platform-info {
+    padding: 40px 0;
+    background-color: #f8f9fa; /* Cor de fundo ligeiramente diferente */
+}
+
+.platform-info h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #343a40;
+}
+.platform-info p {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    color: #495057;
+}
+
+
+/* Footer */
+.site-footer {
+    background-color: #343a40; /* Cor escura para o rodapé */
+    color: #adb5bd; /* Cor clara para o texto */
+    padding: 30px 0;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.site-footer p {
+    margin-bottom: 10px;
+}
+
+.site-footer .footer-links a {
+    color: #ced4da;
+    text-decoration: none;
+    margin: 0 8px;
+}
+
+.site-footer .footer-links a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.site-footer .disclaimer {
+    font-size: 0.8em;
+    max-width: 600px;
+    margin: 15px auto 0 auto;
+    line-height: 1.5;
+    color: #6c757d;
+}
+
+/* Ajustes para Responsividade (adicionar ao final do seu style.css) */
+@media (max-width: 992px) {
+    .hero-section h1 {
+        font-size: 2.4em;
+    }
+    .feature-item {
+        flex-basis: calc(50% - 15px); /* 2 colunas em tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    /* Navbar já foi tratada antes, mas pode precisar de ajustes */
+    .hero-section h1 {
+        font-size: 2em;
+    }
+    .hero-section .subtitle {
+        font-size: 1em;
+    }
+    .download-form input[type="url"] {
+        width: 90%;
+    }
+    .feature-item {
+        flex-basis: 100%; /* 1 coluna em mobile */
+    }
+}
+
+
+
+.youtube-downloader-page .hero-section-platform {
+    background-color: #ffeded; /* Um vermelho bem claro, cor tema do YouTube */
+    padding: 50px 0;
+    text-align: center;
+}
+
+.youtube-downloader-page .platform-icon-large { /* Se for usar ícones Font Awesome */
+    font-size: 4em;
+    color: #FF0000; /* Cor do YouTube */
+    margin-bottom: 20px;
+}
+
+.youtube-downloader-page .hero-section-platform h1 {
+    font-size: 2.5em;
+    color: #c4302b; /* Vermelho mais escuro do YouTube */
+    margin-bottom: 10px;
+    
+}
+
+.youtube-downloader-page .hero-section-platform .subtitle {
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 30px;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.download-form-yt input[type="url"] {
+    width: 80%;
+    max-width: 600px;
+    padding: 14px 18px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.075);
+}
+
+.download-form-yt .btn-download-yt {
+    background-color: #FF0000; /* Cor do YouTube */
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px; /* Espaço se o input e o botão ficarem em linhas separadas em telas menores */
+}
+
+.download-form-yt .btn-download-yt:hover {
+    background-color: #c4302b; /* Vermelho mais escuro */
+}
+
+.video-info-yt {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    display: inline-block; /* Para centralizar */
+    text-align: left;
+    max-width: 600px; /* Limitar largura */
+}
+
+.video-thumbnail-yt {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+}
+
+.video-info-yt h3 {
+    font-size: 1.4em;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.video-info-yt p {
+    font-size: 0.95em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.format-options-yt {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Espaço entre os botões de formato */
+    justify-content: center;
+}
+
+.btn-format {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-format:hover {
+    background-color: #e0e0e0;
+    border-color: #bbb;
+}
+
+/* Seção "Como Baixar" */
+.how-to-section {
+    padding: 50px 0;
+    background-color: #fff; /* Fundo branco para esta seção */
+    text-align: center;
+}
+
+.how-to-section h2 {
+    font-size: 2em;
+    color: #343a40;
+    margin-bottom: 40px;
+}
+
+.steps-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.step-item {
+    flex-basis: calc(33.333% - 30px);
+    min-width: 260px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+.step-item .step-number {
+    display: inline-block;
+    background-color: #FF0000; /* Cor do YouTube */
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+.step-item h3 {
+    font-size: 1.3em;
+    color: #343a40;
+    margin-bottom: 10px;
+}
+
+.step-item p {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+/* Seção de Recursos do YouTube Downloader */
+.features-yt {
+    padding: 40px 0;
+    background-color: #f4f7f6; /* Mesmo fundo da página principal */
+}
+.features-yt .container {
+    max-width: 800px;
+}
+.features-yt h2 {
+    text-align: center;
+    font-size: 1.8em;
+    color: #343a40;
+    margin-bottom: 25px;
+}
+.features-yt ul {
+    list-style: none; /* Ou 'disc' se preferir bolinhas */
+    padding-left: 0;
+}
+.features-yt li {
+    background-color: #fff;
+    padding: 12px 18px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border-left: 4px solid #FF0000; /* Destaque com cor do YouTube */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    color: #454545;
+}
+.features-yt li::before { /* Para ícones ou marcadores customizados, se quiser */
+    /* content: '✔ '; */
+    /* color: #FF0000; */
+    /* font-weight: bold; */
+    /* margin-right: 8px; */
+}
+
+/* Ajustes de Responsividade para a página do YouTube */
+@media (max-width: 768px) {
+    .download-form-yt input[type="url"],
+    .download-form-yt .btn-download-yt {
+        width: 90%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .download-form-yt .btn-download-yt {
+        margin-top: 15px;
+    }
+
+    .step-item {
+        flex-basis: 100%; /* Uma coluna em telas menores */
+    }
+    .video-info-yt {
+        width: 90%;
+    }
+}

@@ -1,0 +1,65 @@
+
+
+<!DOCTYPE html>
+<html lang="pr-br">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>snaptube</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    
+    
+    
+</head>
+<body>
+        
+    <nav class="navbar">
+        <div class="container1">
+            <a href="{{url_for('home')}}" class="nav-logo">SnapSave</a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{url_for('youtube_downloader_page')}}" class="nav-link">YouTube Downloader</a>
+                </li>
+                <li class="nav-item">
+                    <a href="tiktok-downloader.html" class="nav-link">TikTok Downloader</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{url_for('instagram_reels_downloader_page')}}" class="nav-link">Instagram Downloader</a>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
+
+
+    {%block conteudo%}
+
+    {% endblock %}
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© <span id="current-year"></span> SnapSave. Todos os direitos reservados.</p>
+            <p class="footer-links">
+                <a href="{{url_for('termos')}}">Termos de Serviço</a> |
+                <a href="{{url_for('privacidade')}}">Política de Privacidade</a>
+            </p>
+            <p class="disclaimer">
+                Este site não é afiliado ao TikTok, Instagram ou YouTube. Por favor, respeite os direitos autorais dos criadores de conteúdo.
+                Use este serviço de forma responsável e apenas para conteúdo que você tem o direito de baixar.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Simples script para o ano atual no rodapé
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+    </script>
+
+
+
+
+</body>
+</html>
