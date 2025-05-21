@@ -1,0 +1,109 @@
+{% extends "template.html" %}
+
+
+{% block conteudo %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baixar Vídeos do TikTok - SnapSave</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+
+    <main class="main-content youtube-downloader-page">
+        <section class="hero-section-platform">
+            <div class="container">
+                <h1 style="color:#5b51d8">Downloader videos do TikTok</h1>
+                <p class="subtitle">Cole o link do vídeo do Reels abaixo para baixar em diversos formatos e qualidades.</p>
+
+                <form id="youtube-download-form" class="download-form-yt" method="POST" action="{{ url_for('instagram_reels_downloader_page') }}">
+                    <div class="input-group">
+                        <input type="url" id="youtube-video-url" name="video-url" placeholder="Cole o link do Reels do Instagram aqui..."
+                               value="{{ submitted_url or '' }}" required>
+                    </div>
+                    <button  style="background-color:#5b51d8" type="submit" class="btn-download-yt">
+                        Analisar Link
+                    </button>
+                </form>
+
+                {% if error_message %}
+                    <div id="yt-status-messages" class="status-messages" style="color: red; margin-top:15px;">
+                        {{ error_message }}
+                    </div>
+                {% endif %}
+
+                <!-- Área para exibir informações do vídeo e opções de download (RENDERIZADO PELO FLASK) -->
+                {% if video_info and video_info.title %}
+                <div id="yt-video-info-area-flask" class="video-info-yt">
+                    <img src="{{ video_info.thumbnail_url }}" alt="Thumbnail de {{ video_info.title }}" class="video-thumbnail-yt">
+                    <h3>{{ video_info.title }}</h3>
+                    <p>Canal: {{ video_info.uploader }}</p>
+                    <p>Duração: {{ video_info.duration }}</p>
+
+                    <h4>Escolha o Formato e Qualidade:</h4>
+                    <div id="yt-format-options-flask" class="format-options-yt">
+                        <div id="all-format-buttons">
+                            {% for format in video_info.formats %}
+                                <a href="{{ url_for('download_ig_video', url=video_info.original_url, itag=format.itag, filename=video_info.title + '.' + format.ext) }}"
+                                   class="btn-format"> 
+                                   {{ format.label }} ({{ format.ext }})
+                                </a>
+                            {% else %}
+                                <p>Nenhum formato de download disponível encontrado.</p>
+                            {% endfor %}
+                        </div>
+                        <div id="loading-animation" style="display: none;">
+                            <img src="{{ url_for('static', filename='loading.gif') }}" alt="Baixando..." style="width: 40px;">
+                        </div>
+                    </div>
+                    
+                </div>
+                {% endif %}
+
+                <div id="yt-video-info-area" class="video-info-yt" style="display: none;">
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSpan = document.getElementById('current-year-yt');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+        document.addEventListener('DOMContentLoaded', function () {
+        const downloadButtons = document.querySelectorAll('.btn-format');
+
+        downloadButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Oculta o botão clicado
+                this.style.display = 'none';
+            });
+        });
+    });
+});
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.btn-format');
+            const allButtonsWrapper = document.getElementById('all-format-buttons');
+            const loadingDiv = document.getElementById('loading-animation');
+    
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    allButtonsWrapper.style.display = 'none';
+    
+                    loadingDiv.style.display = 'block';
+                });
+            });
+        });
+    </script>
+
+</body>
+
+
+{% endblock %}

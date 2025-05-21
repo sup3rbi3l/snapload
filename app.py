@@ -8,6 +8,7 @@ import time
 import requests
 import instaloader
 import re
+from moviepy.editor import VideoFileClip
 
 app = Flask(__name__)
 
@@ -35,14 +36,30 @@ def shortcode_extract(url):
 
 
 
-def delete_file_later(filepath, delay=5):
+def delete_file_later(filepath,ext, delay=20):
     def delayed_delete():
         time.sleep(delay)
-        try:
-            os.remove(filepath)
-            print(f"Arquivo {filepath} apagado com sucesso.")
-        except Exception as e:
-            print(f"Erro ao apagar arquivo: {e}")
+        if ext == 'mp3':
+            try:
+                os.remove(filepath)
+                print(f"Arquivo {filepath} apagado com sucesso.")
+            except Exception as e:
+                print(f"Erro ao apagar arquivo: {e}")
+                
+            file = filepath.replace('mp3','mp4')
+            print(file)
+            try:
+                os.remove(file)
+            except Exception as e:
+                print(e)
+            
+        else:
+            try:
+                os.remove(filepath)
+                print(f"Arquivo {filepath} apagado com sucesso.")
+            except Exception as e:
+                print(f"Erro ao apagar arquivo: {e}")
+            
     threading.Thread(target=delayed_delete).start()
 
 @app.route('/home')  
@@ -231,7 +248,7 @@ def download_ig_video():
     filename = (f'{shortcode}.mp4')
     L = instaloader.Instaloader(
     download_video_thumbnails=False,
-    download_geotags=False,
+    download_geotags=False, 
     download_comments=False,
     save_metadata=False,
     post_metadata_txt_pattern='',
@@ -245,57 +262,28 @@ def download_ig_video():
         case '22':
             print('720p')
             ext = 'mp4'
-            ydl_opts = {
-                'cookies': 'youtube.com_cookies.txt',
-                'format': 'bestvideo[height<=720][ext=mp4]+bestaudio/best',
-                'merge_output_format': 'mp4',
-                'outtmpl': '%(title)s.%(ext)s',
-                'quiet': False,
-            }
             
-        case '18':
-            print('360p')
-            ext = 'mp4'
-            ydl_opts = {
-                'cookies': 'youtube.com_cookies.txt',
-                'format': 'bestvideo[height<=360][ext=mp4]+bestaudio/best',
-                'merge_output_format': 'mp4',
-                'outtmpl': '%(title)s.%(ext)s',
-                'quiet': False,
-            }
 
         case '140':
             print('mp3')
             ext = 'mp3'
-            ydl_opts = {
-                'cookies': 'youtube.com_cookies.txt',
-                'format': 'bestaudio/best',
-                'quiet': False,
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-                'outtmpl': '%(title)s.%(ext)s' 
-            }
+            
     if post.is_video:
         L.download_post(post, target='.')
     
     
     print(filename)
     if ext == 'mp3' :
-        pass
+        clip = VideoFileClip(filename)
+        clip.audio.write_audiofile(f'{shortcode}.mp3')
+        clip.close()
+        time.sleep(2)
+        #os.remove(filename)
+        filename = f'{shortcode}.mp3'
     
-    delete_file_later(filename, delay=60)
+    
+    delete_file_later(filename,ext, delay=20)
     return send_file(filename, as_attachment=True, conditional=True)
-
-
-
-
-
-
-
-
 
 
 @app.route('/download_yt_video')
@@ -356,8 +344,16 @@ def download_yt_video():
     if ext == 'mp3' :
         filename = filename.replace('.webm', '.mp3')
     
-    delete_file_later(filename, delay=60)
+    delete_file_later(filename,ext, delay=20)
     return send_file(filename, as_attachment=True, conditional=True)
+
+@app.route('/tk_downloader_page')
+def tk_downloader_page():
+    
+    
+    
+    return render_template('tk_dl.html')
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))  # usa a porta definida pelo Railway
