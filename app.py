@@ -343,6 +343,7 @@ def download_yt_video():
     print(filename)
     if ext == 'mp3' :
         filename = filename.replace('.mp4', '.mp3')
+        filename = filename.replace('.webm', '.mp3')
     
     delete_file_later(filename,ext, delay=20)
     return send_file(filename, as_attachment=True, conditional=True)
