@@ -126,7 +126,7 @@ def get_video_info_from_youtube(video_url):
         video_id = extract_video_id_py(video_url)
         
         ydl_opts = {
-            'cookies': 'youtube.com_cookies.txt',
+            'cookies': 'cookies.txt',
             'quiet': True,  
             'skip_download': True,
         }   
@@ -302,6 +302,7 @@ def download_yt_video():
             print('720p')
             ext = 'mp4'
             ydl_opts = {
+                'cookies': 'cookies.txt',
                 'format': 'bestvideo[height<=720][ext=mp4]+bestaudio/best',
                 'merge_output_format': 'mp4',
                 'outtmpl': '%(title)s.%(ext)s',
@@ -312,6 +313,7 @@ def download_yt_video():
             print('360p')
             ext = 'mp4'
             ydl_opts = {
+                'cookies': 'cookies.txt',
                 'format': 'bestvideo[height<=360][ext=mp4]+bestaudio/best',
                 'merge_output_format': 'mp4',
                 'outtmpl': '%(title)s.%(ext)s',
@@ -322,6 +324,7 @@ def download_yt_video():
             print('mp3')
             ext = 'mp3'
             ydl_opts = {
+                'cookies': 'cookies.txt',
                 'format': 'bestaudio/best',
                 'quiet': False,
                 'postprocessors': [{
