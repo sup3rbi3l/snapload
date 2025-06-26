@@ -1,366 +1,136 @@
 from flask import Flask, render_template, request, redirect, url_for,send_file,after_this_request
-import yt_dlp
-from datetime import timedelta
 import os
-from bs4 import BeautifulSoup
-import threading
-import time
-import requests
-import instaloader
-import re
-from moviepy.editor import VideoFileClip
+import pymysql
 
 app = Flask(__name__)
+def databaseConect():
+    sql = pymysql.connect(
+        host='trolley.proxy.rlwy.net',
+        port=55826,
+        user='root',
+        password='NFKhjuHSSxPPbBKVbpwxBKTRmEQWfHxr',
+        database ='railway'
+    )
+    return sql
 
-
-
-def login_ig():
-    USERNAME = 'myrabella.contact@gmail.com'
-    PASSWORD = 'VIDA@2018'
-    
-    L = instaloader.Instaloader()
-    
-    
-    return L
-
-L = login_ig()
-
-def shortcode_extract(url):
-    match = re.search(r'/reel/([^/]+)/', url)
-    if not match:
-        print("URL inválida! Certifique-se de que é um link de Reels.")
-        exit()
-
-    shortcode = match.group(1)
-    return shortcode
-
-
-
-def delete_file_later(filepath,ext, delay=20):
-    def delayed_delete():
-        time.sleep(delay)
-        if ext == 'mp3':
-            try:
-                os.remove(filepath)
-                print(f"Arquivo {filepath} apagado com sucesso.")
-            except Exception as e:
-                print(f"Erro ao apagar arquivo: {e}")
-                
-            file = filepath.replace('mp3','mp4')
-            print(file)
-            try:
-                os.remove(file)
-            except Exception as e:
-                print(e)
-            
-        else:
-            try:
-                os.remove(filepath)
-                print(f"Arquivo {filepath} apagado com sucesso.")
-            except Exception as e:
-                print(f"Erro ao apagar arquivo: {e}")
-            
-    threading.Thread(target=delayed_delete).start()
-
-@app.route('/home')  
-def home():
-
-    return render_template('index.html')
-
-@app.route('/')
-def index_redirect():
-    
-        return redirect(url_for('home'))
-
-@app.route('/sobre') 
-def sobre():
-    return render_template("yt_dw.html")
-
-
-@app.route('/termos') 
-def termos():
-    return render_template("termos.html")
-
-@app.route('/privacidade') 
-def privacidade():
-    return render_template("privacy.html")
-
-
-def get_instagram_reel_info(reel_url):
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
-    }
-    
-    response = requests.get(reel_url, headers=headers)
-    if response.status_code != 200:
-        return None
-    
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    # Título (muitas vezes vem como descrição)
-    title_tag = soup.find("meta", property="og:title")
-    title = title_tag['content'] if title_tag else "Sem título"
-    
-    thumbnail_tag = soup.find("meta", property="og:image")
-    thumbnail = thumbnail_tag['content'] if thumbnail_tag else None
-
-    
-    shortcode = shortcode_extract(reel_url)
-
-    post = instaloader.Post.from_shortcode(L.context, shortcode)
-    
-    # DADOS
-    duration = post.video_duration  # em segundos
-    author = post.owner_username
-
-    
-    
-    return title,author,thumbnail,duration
-        
-
-
-
-def get_video_info_from_youtube(video_url):
-    print("chegou aqui no youtube")
-    if "youtube.com" in video_url or "youtu.be" in video_url:
-        video_id = extract_video_id_py(video_url)
-        
-        ydl_opts = {
-            'cookiefile': 'cookies.txt',
-            'quiet': True,  
-            'skip_download': True,
-        }   
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(video_url, download=False)
-
-        titulo = info.get('title')
-        canal = info.get('uploader')
-        duracao_video = str(timedelta(seconds=info.get('duration')))
-        return {
-            'title': f'{titulo}',
-            'thumbnail_url': f'https://i.ytimg.com/vi/{video_id}/hqdefault.jpg',
-            'uploader': f'{canal}',
-            'duration': f'{duracao_video}',
-            'formats': [
-                {'itag': '22', 'label': 'Mp4 720p', 'ext': 'mp4', 'download_url': '#simulated_download_link_720p'},
-                {'itag': '18', 'label': 'Mp4 360p', 'ext': 'mp4', 'download_url': '#simulated_download_link_360p'},
-                {'itag': '140', 'label': 'Mp3 Áudio (128kbps)', 'ext': 'mp3', 'download_url': '#simulated_download_link_audio_m4a'},
-            ],
-            'original_url': video_url,
-            'error': None
-        }
-    return {'error': 'Link inválido ou não suportado.', 'title': None}
-
-def get_video_info_from_instagram(video_url):
-    
-    print('pelo menos chegou aqui')
-    if "instagram.com" in video_url:
-        
-        
-        titulo,canal,thumbnail_url,duracao = get_instagram_reel_info(video_url)
-        
-        print(canal)
-        duracao_video = duracao
-        #duracao_video = str(timedelta(duracao))
-        return {
-            'title': f'{titulo}',
-            'thumbnail_url': f'{thumbnail_url}',
-            'uploader': f'{canal}',
-            'duration': f'{duracao_video}',
-            'formats': [
-                {'itag': '22', 'label': 'Mp4 720p', 'ext': 'mp4', 'download_url': '#simulated_download_link_720p'},
-                {'itag': '140', 'label': 'Mp3 Áudio (128kbps)', 'ext': 'mp3', 'download_url': '#simulated_download_link_audio_m4a'},
-            ],
-            'original_url': video_url,
-            'error': None
-        }
-    return {'error': 'Link inválido ou não suportado.', 'title': None}
-
-
-def extract_video_id_py(url):
-    video_id = ''
-    if "youtube.com/watch?v=" in url:
-        video_id = url.split('v=')[1].split('&')[0]
-    elif "youtu.be/" in url:
-        video_id = url.split('youtu.be/')[1].split('?')[0]
-    return video_id or 'dQw4w9WgXcQ' # Fallback
-
-# Em produção, o processamento do link deveria ser POST.
-@app.route('/youtube-downloader', methods=['GET', 'POST'])
-def youtube_downloader_page():
-    video_info = None
-    error_message = None
-    submitted_url = ''
-
-    if request.method == 'POST':
-        video_url = request.form.get('video-url')
-        submitted_url = video_url 
-        if video_url:
-            
-            video_data = get_video_info_from_youtube(video_url)
-            if video_data and not video_data.get('error'):
-                video_info = video_data
-            else:
-                error_message = video_data.get('error', 'Ocorreu um erro ao processar o link.')
-        else:
-            error_message = "Por favor, insira um link do YouTube."
-
-    return render_template('yt_dl.html',
-                           video_info=video_info,
-                           error_message=error_message,
-                           submitted_url=submitted_url)
-
-@app.route('/instagram_reels_downloader_page', methods=['GET', 'POST'])
-def instagram_reels_downloader_page():
-    video_info = None
-    error_message = None
-    submitted_url = ''
-
-    if request.method == 'POST':
-        video_url = request.form.get('video-url')
-        submitted_url = video_url 
-        if video_url:
-            
-            video_data = get_video_info_from_instagram(video_url)
-            if video_data and not video_data.get('error'):
-                video_info = video_data
-            else:
-                error_message = video_data.get('error', 'Ocorreu um erro ao processar o link.')
-        else:
-            error_message = "Por favor, insira um link de reels."
-
-    return render_template('ig_dl.html',
-                           video_info=video_info,
-                           error_message=error_message,
-                           submitted_url=submitted_url)
-
-
-@app.route('/download_ig_video')
-def download_ig_video():
-    itag = request.args.get('itag')
-    video_url = request.args.get('url')
-    if not video_url or not itag:
-        return "Erro: URL do vídeo ou formato não especificado.", 400
-    
-    
-    
-    shortcode = shortcode_extract(video_url)
-    filename = (f'{shortcode}.mp4')
-    L = instaloader.Instaloader(
-    download_video_thumbnails=False,
-    download_geotags=False, 
-    download_comments=False,
-    save_metadata=False,
-    post_metadata_txt_pattern='',
-    dirname_pattern='.',
-    filename_pattern=shortcode
+sql = pymysql.connect(
+        host='trolley.proxy.rlwy.net',
+        port=55826,
+        user='root',
+        password='NFKhjuHSSxPPbBKVbpwxBKTRmEQWfHxr',
 )
-    post = instaloader.Post.from_shortcode(L.context, shortcode)
-    
-    match itag:
-    
-        case '22':
-            print('720p')
-            ext = 'mp4'
-            
 
-        case '140':
-            print('mp3')
-            ext = 'mp3'
-            
-    if post.is_video:
-        L.download_post(post, target='.')
-    
-    
-    print(filename)
-    if ext == 'mp3' :
-        clip = VideoFileClip(filename)
-        clip.audio.write_audiofile(f'{shortcode}.mp3')
-        clip.close()
-        time.sleep(2)
-        #os.remove(filename)
-        filename = f'{shortcode}.mp3'
-    
-    
-    delete_file_later(filename,ext, delay=20)
-    return send_file(filename, as_attachment=True, conditional=True)
+data = sql.cursor()
 
+data.execute('SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = "railway";')
+result = data.fetchone()[0]
 
-@app.route('/download_yt_video')
-def download_yt_video():
+if result > 0:
+    sql.close()
+    sql = databaseConect()
+    print('Banco encontrado')
     
-    video_url_to_download = request.args.get('url')
-    itag = request.args.get('itag')
-    filename = request.args.get('filename', 'video.mp4')
+    data = sql.cursor()
+    
+    data.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'railway' AND table_name = 'produtos'")
 
-    if not video_url_to_download or not itag:
-        return "Erro: URL do vídeo ou formato não especificado.", 400
-    
-    match itag:
-    
-        case '22':
-            print('720p')
-            ext = 'mp4'
-            ydl_opts = {
-                'cookiefile': 'cookies.txt',
-                'format': 'bestvideo[height<=720][ext=mp4]+bestaudio/best',
-                'merge_output_format': 'mp4',
-                'outtmpl': '%(title)s.%(ext)s',
-                'quiet': False,
-            }
-            
-        case '18':
-            print('360p')
-            ext = 'mp4'
-            ydl_opts = {
-                'cookiefile': 'cookies.txt',
-                'format': 'bestvideo[height<=360][ext=mp4]+bestaudio/best',
-                'merge_output_format': 'mp4',
-                'outtmpl': '%(title)s.%(ext)s',
-                'quiet': False,
-            }
-
-        case '140':
-            print('mp3')
-            ext = 'mp3'
-            ydl_opts = {
-                'cookiefile': 'cookies.txt',
-                'format': 'bestaudio/best',
-                'quiet': False,
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-                'outtmpl': '%(title)s.%(ext)s' 
-            }
-            
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+    result = data.fetchone()[0]
+    if result == 0:
         
-        info = ydl.extract_info(video_url_to_download,download=False)
-        print(ydl.prepare_filename(info))
-        filename = info.get('title')
-        filename = ydl.prepare_filename(info)
-        video = ydl.download([video_url_to_download])
+        data.execute("CREATE TABLE produtos (id INT AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(255), preco DECIMAL(10, 2),quantidade INT);")
+        
+        sql.commit()
+        print('tabela produtos criada')
     
-    print(filename)
-    if ext == 'mp3' :
-        filename = filename.replace('.mp4', '.mp3')
-        filename = filename.replace('.webm', '.mp3')
-    
-    delete_file_later(filename,ext, delay=20)
-    return send_file(filename, as_attachment=True, conditional=True)
+    else:
 
-@app.route('/tk_downloader_page')
-def tk_downloader_page():
+        print('tabela produtos ja existia')
+    sql.close()
+
+else:
+    print('chegou foda')
+    data.execute('CREATE DATABASE railway;')
+    sql.commit()
+    sql = databaseConect()
+    data = sql.cursor()
+    data.execute("CREATE TABLE produtos (id INT AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(255), preco DECIMAL(10, 2),quantidade INT);")
+    sql.commit()
+    sql.close()
+
+@app.route('/produtos')
+def produtos():
+    sql = databaseConect()
+    data = sql.cursor()
+    data.execute('SELECT * FROM produtos')
+    table_data = data.fetchall()
+   
+    
+    return render_template('produtos.html',table_data=table_data)
+
+
+@app.route('/delete_product/<id>',methods=['GET', 'POST'])
+def delete_product(id):
+    print(id)
+    sql = databaseConect()
+    data = sql.cursor()
+    data.execute("""
+        DELETE FROM produtos
+        WHERE id = %s;
+    """,(id,))
+    
+    sql.commit()
+    sql.close
+    
+    return redirect(url_for('produtos'))
+    
+@app.route('/add_products',methods=["POST","GET"])
+def add_products():
+    
+    name = request.form.get('name')
+    price = request.form.get('price')
+    quantity = request.form.get('quantity')
+    
+    print(name,price,quantity)
+    if name == None or name == '':
+        return render_template('add_produtos.html',error='erro') 
     
     
     
-    return render_template('tk_dl.html')
+    sql = databaseConect()
+    data = sql.cursor()
+    data.execute('INSERT INTO produtos(nome,preco,quantidade) VALUES (%s,%s,%s)',(name,price,quantity))
+    
+    sql.commit()
+    sql.close()
+    
+    return render_template('add_produtos.html')
+
+@app.route('/update_product/<id>',methods=['GET', 'POST'])
+def update_product(id):
+    name = request.form.get('name')
+    price = request.form.get('price')
+    quantity = request.form.get('quantity')
+    
+    
+    
+    print(name,price,quantity)
+    if request.method == 'POST':
+        
+        if name == None or name == '':
+            return render_template('add_produtos.html',error='erro') 
+    
+        sql = databaseConect()
+        data = sql.cursor()
+        data.execute('UPDATE produtos SET nome = %s,  preco = %s, quantidade = %s WHERE id = %s;',(name,price,quantity,id))
+        
+        sql.commit()
+        sql.close()
+        
+        return redirect(url_for('produtos'))
+        
+    return render_template('update_product.html',id = id)
 
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))  # usa a porta definida pelo Railway
     app.run(host='0.0.0.0', port=port, debug=True)
-
-                                     
